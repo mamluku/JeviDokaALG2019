@@ -1,0 +1,109 @@
+package lexoUrl;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class WebCrawler {
+	
+	
+	public static ArrayList<String> shtoUrlNeListe(String str, ArrayList<String> list){
+		try {
+			Scanner input2 = new Scanner(new URL(str).openStream());
+			String info = "";
+			while(input2.hasNextLine()) {
+				info = info + input2.nextLine();
+			}
+			input2.close();
+			int i = info.indexOf("\"http");
+			
+			while(i!=-1) {
+				int j = info.indexOf("\"",i+5);
+				list.add(info.substring(i + 1, j));
+				i = info.indexOf("\"http", j + 1);
+			}	
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
+	
+	public static void shnderroListenMeElementeUnike(ArrayList<String>x) {
+		for(int i1 = 0; i1 < x.size()-1;i1++) {
+			for(int j = i1+1; j <x.size(); j++) {
+				if(x.get(i1).contentEquals(x.get(j))) {
+					x.remove(j);
+				}
+			}
+		}
+		
+	}
+
+	public static void shkruajNeSkedarUrl(ArrayList<String> x) {
+		try {
+			PrintWriter output = new PrintWriter("URL.txt");
+			for(int i = 0; i < x.size(); i++) {
+				output.println(x.get(i));
+			}
+			output.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner input1 = new Scanner(System.in);
+		System.out.println("Jepni url e kerkuar: ");
+		String url1 = input1.nextLine();
+		System.out.println("Jepni nivelin e thellesise se kerkimit: ");
+		int niveli = input1.nextInt();
+		input1.close();
+		
+		
+		try {
+			Scanner input2 = new Scanner(new URL(url1).openStream());
+			String info = "";
+			
+			ArrayList<String> listaMeUrl = new ArrayList<String>();
+			
+			while(input2.hasNextLine()) {
+				info = info + input2.nextLine();
+			}
+			input2.close();
+			int i = info.indexOf("\"http");
+			
+			while(i!=-1) {
+				int j = info.indexOf("\"",i+5);
+				listaMeUrl.add(info.substring(i + 1, j));
+				i = info.indexOf("\"http", j + 1);
+			}
+			
+		int poz = 0, gjatesiaListesParaardhese = listaMeUrl.size();
+			while(niveli > 1) {
+				for(;poz<gjatesiaListesParaardhese; poz++) {
+					listaMeUrl = shtoUrlNeListe(listaMeUrl.get(poz), listaMeUrl);
+				}
+				shnderroListenMeElementeUnike(listaMeUrl);
+				poz = gjatesiaListesParaardhese;
+				gjatesiaListesParaardhese= listaMeUrl.size()-gjatesiaListesParaardhese;
+				niveli--;
+			}
+			shnderroListenMeElementeUnike(listaMeUrl);
+			shkruajNeSkedarUrl(listaMeUrl);	
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+}
+
