@@ -4,7 +4,7 @@
 
 using namespace std;
 
-///Kompleksiteti eshte i njejte me pemen e kerkimit binar pra nlogn
+///Kompleksiteti eshte i njejte me pemen e kerkimit binar pra O(nlogn)
 
 class Node{
 
