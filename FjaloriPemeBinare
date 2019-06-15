@@ -6,7 +6,7 @@
 /**
 Duke marre serish parasysh marreveshjen qe mora dhe per implementimin me ane te listave te Fjalorit arrij ne kete kod.
 Ketu koha ekzekutimit te programit eshte me e shkurter per secilen prej skedareve te lexuar. Kompleksiteti i algoritmit eshte
-O(nlogn) log eshte me baze 2.
+O(nlogn).
 Percaktohet ne pjesen e kodit:
 	while(file >> fileWord){
 		if(!ekziston(root, fileWord)){
