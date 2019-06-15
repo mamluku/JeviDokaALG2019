@@ -1,0 +1,167 @@
+#include <iostream>
+#include <fstream>
+#include <time.h>
+
+
+/**
+Duke marre serish parasysh marreveshjen qe mora dhe per implementimin me ane te listave te Fjalorit arrij ne kete kod.
+Ketu koha ekzekutimit te programit eshte me e shkurter per secilen prej skedareve te lexuar. Kompleksiteti i algoritmit eshte
+O(nlogn) log eshte me baze 2.
+Percaktohet ne pjesen e kodit:
+	while(file >> fileWord){
+		if(!ekziston(root, fileWord)){
+			insert(root, fileWord);
+			cout << (int)fileWord.at(0) << "\t" << fileWord << endl;
+		}
+	}
+ Ku ketu marrim rastin me te keq ku cdo fjale e skedarit nuk eshte paraqitur me pare dhe ne kontrollojme per cdo fjale nese ekziston
+ ose jo.
+*/
+
+
+
+
+using namespace std;
+
+class Node{
+	public:
+		int key;
+		string word;
+		Node* left;
+		Node* right;
+};
+
+Node* newNode(string fileWord){
+    Node* temp = new Node;
+
+    temp->key = (int)fileWord.at(0);
+	temp->word = fileWord;
+
+    temp->left = NULL;
+    temp->right = NULL;
+
+    return temp;
+}
+
+Node* insert(Node* root, string fileWord){
+
+    Node* newnode = newNode(fileWord);
+
+    int key = (int)fileWord.at(0);
+
+    Node* x = root;
+
+    Node* prindElementitTeRi = NULL;
+
+    while(x != NULL) {
+        prindElementitTeRi = x;
+        if (key < x->key)
+            x = x->left;
+        else
+            x = x->right;
+    }
+
+    if (prindElementitTeRi == NULL) {
+        prindElementitTeRi = newnode;
+	}
+
+    else if (key < prindElementitTeRi->key) {
+    	prindElementitTeRi->left = newnode;
+	}
+
+    else{
+        prindElementitTeRi->right = newnode;
+	}
+
+    return prindElementitTeRi;
+}
+
+bool ekziston(Node* root, string fileWord) {
+	if (root != NULL) {
+		if (root->word == fileWord) {
+			return true;
+		} else {
+			return ekziston(root->left, fileWord) || ekziston(root->right, fileWord);
+		}
+	}
+	return false;
+}
+
+string menu(){
+	string filename;
+	int zgjedhje;
+
+	cout << "Please choose the file you want to create the dictionary" << endl;
+	cout << "n";
+
+	//Prints a list with the names of files available
+	cout << "1. 100Fjale.txt \n"
+		 << "2. 1000Fjale.txt \n"
+		 << "3. 100000Fjale.txt \n"
+		 << "4. 1000000Fjale.txt \n";
+
+	cout << "--------------------------------------------------------\n";
+
+	cout << "\nFile nr: ";
+	cin >> zgjedhje;
+
+	switch(zgjedhje){
+
+	case 1:
+		filename = "100Fjale.txt";
+		break;
+
+	case 2:
+		filename = "1000Fjale.txt";
+		break;
+
+	case 3:
+		filename = "100000Fjale.txt";
+		break;
+
+	case 4:
+		filename = "1000000Fjale.txt";
+		break;
+
+	default:
+		cout << "Zgjidhni nje skedar nga lista e mesiperme: ";
+		break;
+	}
+	return filename;
+}
+
+int main(){
+
+	clock_t t1, t2;
+
+	t1 = clock();
+
+	string fileWord;
+	ifstream file;
+
+	file.open(menu().c_str());
+
+	///Krijojme rrenjen
+
+	file >> fileWord;
+	Node* root = newNode(fileWord);
+	cout << (int)fileWord.at(0) << "\t" << fileWord << endl;
+
+	///Lexoj skedarin
+	while(file >> fileWord){
+		if(!ekziston(root, fileWord)){
+			insert(root, fileWord);
+			cout << (int)fileWord.at(0) << "\t" << fileWord << endl;
+		}
+	}
+
+	file.close();
+
+    t2 = clock();
+
+    float dif ((float)t2 - (float)t1);
+
+    cout << "\nKoha ekzekutimit: " << dif/CLOCKS_PER_SEC << "s" << endl;
+
+	return 0;
+}
