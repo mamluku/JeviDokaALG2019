@@ -39,7 +39,7 @@ public:
 };
 
 /// Menu
-string showOptionMenu()
+string menu()
 {
 
     string filename;
@@ -48,7 +48,6 @@ string showOptionMenu()
     cout << "Zgjidhni skedarin qe deshironi te hapni" << endl;
     cout << "\n";
 
-    //Prints a list with the names of files available
     cout << "1. 100Fjale.txt \n"
          << "2. 1000Fjale.txt \n"
          << "3. 100000Fjale.txt \n"
@@ -103,7 +102,7 @@ int main()
     ifstream file;
 
     ///Hap skedar
-    file.open(showOptionMenu().c_str());
+    file.open(menu().c_str());
 
     /// Lexoj skedarin string pas stringu
     while(file >> fileWord)
